@@ -10,7 +10,7 @@ public class Transaction {
     private String vendor;
     private double amount;
 
-    public Transaction(LocalTime time, LocalDate date, String transactionDescription, String vendor, double amount) {
+    public Transaction(LocalDate date, LocalTime time, String transactionDescription, String vendor, double amount) {
         this.time = time;
         this.date = date;
         this.transactionDescription  = transactionDescription;
