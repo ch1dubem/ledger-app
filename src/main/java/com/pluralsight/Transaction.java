@@ -6,14 +6,14 @@ import java.time.LocalTime;
 public class Transaction {
     private LocalTime time;
     private LocalDate date;
-    private  String description;
+    private  String transactionDescription;
     private String vendor;
     private double amount;
 
-    public Transaction(LocalTime time, LocalDate date, String description, String vendor, double amount) {
+    public Transaction(LocalTime time, LocalDate date, String transactionDescription, String vendor, double amount) {
         this.time = time;
         this.date = date;
-        this.description = description;
+        this.transactionDescription  = transactionDescription;
         this.vendor = vendor;
         this.amount = amount;
     }
@@ -29,12 +29,7 @@ public class Transaction {
     public void setDate(LocalDate date) {
         this.date = date;
     }
-    public String getDescription() {
-        return description;
-    }
-    public void setDescription(String description) {
-        this.description = description;
-    }
+
     public String getVendor() {
         return vendor;
 
@@ -47,6 +42,13 @@ public class Transaction {
     }
     public void setAmount(double amount) {
         this.amount = amount;
+    }
+
+    public String getTransactionDescription() {
+        return transactionDescription;
+    }
+    public void setTransactionDescription(String transactionDescription) {
+        this.transactionDescription = transactionDescription;
     }
 
 
