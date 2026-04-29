@@ -325,7 +325,10 @@ public class FinancialTracker {
                     filterTransactionsByDate(firstDayOfLastMonth, lastDayOfLastMonth);
                     /* TODO – previous month report */
                 }
-                case "3" -> {/* TODO – year-to-date report   */ }
+                case "3" -> {
+                    filterTransactionsByDate(LocalDate.now().withDayOfYear(1), LocalDate.now());
+                    /* TODO – year-to-date report   */
+                }
                 case "4" -> {/* TODO – previous year report  */ }
                 case "5" -> {/* TODO – prompt for vendor then report */ }
                 case "6" -> customSearch(scanner);
