@@ -317,6 +317,7 @@ public class FinancialTracker {
 
             switch (input) {
                 case "1" -> {
+                    filterTransactionsByDate(LocalDate.now().withDayOfMonth(1), LocalDate.now());
                     /* TODO – month-to-date report */}
                 case "2" -> {/* TODO – previous month report */ }
                 case "3" -> {/* TODO – year-to-date report   */ }
@@ -336,14 +337,15 @@ public class FinancialTracker {
         System.out.printf("%-12s %-10s %-25s %-15s %10s%n", "Date", "Time", "Description", "Vendor", "Amount");
         System.out.println("-".repeat(75));
         for (Transaction transaction : transactions) {
-            if (!transaction.getDate().isAfter(start) && !transaction.getDate().isBefore(end)) {
+            if (transaction.getDate().isAfter(start) && transaction.getDate().isBefore(end)) {
                 System.out.printf("%-12s %-10s %-25s %-15s %10.2f%n",
                         transaction.getDate().format(DATE_FMT), transaction.getTime().format(TIME_FMT),
                         transaction.getTransactionDescription(), transaction.getVendor(), transaction.getAmount());
-                ;
+                        return;
             }
 
         }
+        System.out.println("No transactions found");
         // TODO – iterate transactions, print those within the range
     }
 
