@@ -240,11 +240,49 @@ public class FinancialTracker {
     /* ------------------------------------------------------------------
        Display helpers: show data in neat columns
        ------------------------------------------------------------------ */
-    private static void displayLedger() { /* TODO – print all transactions in column format */ }
+    private static void displayLedger() {
+        System.out.printf("%-12s %-10s %-25s %-15s %10s%n", "Date", "Time", "Description", "Vendor", "Amount");
+        System.out.println("-".repeat(75));
+        for (Transaction transaction : transactions) {
+            System.out.printf("%-12s %-10s %-25s %-15s %10.2f%n",
+                    transaction.getDate().format(DATE_FMT), transaction.getTime().format(TIME_FMT),
+                    transaction.getTransactionDescription(), transaction.getVendor(), transaction.getAmount());
 
-    private static void displayDeposits() { /* TODO – only amount > 0               */ }
+        }
 
-    private static void displayPayments() { /* TODO – only amount < 0               */ }
+        /* TODO – print all transactions in column format */
+    }
+
+    private static void displayDeposits() {
+        System.out.printf("%-12s %-10s %-25s %-15s %10s%n", "Date", "Time", "Description", "Vendor", "Amount");
+        System.out.println("-".repeat(75));
+        for (Transaction transaction : transactions) {
+            if(transaction.getAmount() >= 0) {
+                System.out.printf("%-12s %-10s %-25s %-15s %10.2f%n",
+                        transaction.getDate().format(DATE_FMT), transaction.getTime().format(TIME_FMT),
+                        transaction.getTransactionDescription(), transaction.getVendor(), transaction.getAmount());
+
+            }
+        }
+        /* TODO – only amount > 0               */
+
+    }
+
+    private static void displayPayments() {
+        System.out.printf("%-12s %-10s %-25s %-15s %10s%n", "Date", "Time", "Description", "Vendor", "Amount");
+        System.out.println("-".repeat(75));
+        for (Transaction transaction : transactions) {
+            if(transaction.getAmount() < 0) {
+                System.out.printf("%-12s %-10s %-25s %-15s %10.2f%n",
+                        transaction.getDate().format(DATE_FMT), transaction.getTime().format(TIME_FMT),
+                        transaction.getTransactionDescription(), transaction.getVendor(), transaction.getAmount());
+
+            }
+        }
+
+
+        /* TODO – only amount < 0               */
+    }
 
     /* ------------------------------------------------------------------
        Reports menu
@@ -281,6 +319,8 @@ public class FinancialTracker {
        Reporting helpers
        ------------------------------------------------------------------ */
     private static void filterTransactionsByDate(LocalDate start, LocalDate end) {
+
+
         // TODO – iterate transactions, print those within the range
     }
 
