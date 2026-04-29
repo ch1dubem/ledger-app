@@ -5,6 +5,7 @@ import java.time.LocalDate;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Scanner;
 
 /*
@@ -241,21 +242,28 @@ public class FinancialTracker {
        Display helpers: show data in neat columns
        ------------------------------------------------------------------ */
     private static void displayLedger() {
+        System.out.println("All Transactions:");
+        System.out.println("-".repeat(75));
         System.out.printf("%-12s %-10s %-25s %-15s %10s%n", "Date", "Time", "Description", "Vendor", "Amount");
         System.out.println("-".repeat(75));
+        Collections.reverse(transactions);
         for (Transaction transaction : transactions) {
             System.out.printf("%-12s %-10s %-25s %-15s %10.2f%n",
                     transaction.getDate().format(DATE_FMT), transaction.getTime().format(TIME_FMT),
                     transaction.getTransactionDescription(), transaction.getVendor(), transaction.getAmount());
 
         }
+        Collections.reverse(transactions);
 
         /* TODO – print all transactions in column format */
     }
 
     private static void displayDeposits() {
+        System.out.println("All Deposits:");
+        System.out.println("-".repeat(75));
         System.out.printf("%-12s %-10s %-25s %-15s %10s%n", "Date", "Time", "Description", "Vendor", "Amount");
         System.out.println("-".repeat(75));
+        Collections.reverse(transactions);
         for (Transaction transaction : transactions) {
             if(transaction.getAmount() >= 0) {
                 System.out.printf("%-12s %-10s %-25s %-15s %10.2f%n",
@@ -264,13 +272,17 @@ public class FinancialTracker {
 
             }
         }
+        Collections.reverse(transactions);
         /* TODO – only amount > 0               */
 
     }
 
     private static void displayPayments() {
+        System.out.println("All Payments:");
+        System.out.println("-".repeat(75));
         System.out.printf("%-12s %-10s %-25s %-15s %10s%n", "Date", "Time", "Description", "Vendor", "Amount");
         System.out.println("-".repeat(75));
+        Collections.reverse(transactions);
         for (Transaction transaction : transactions) {
             if(transaction.getAmount() < 0) {
                 System.out.printf("%-12s %-10s %-25s %-15s %10.2f%n",
@@ -279,6 +291,7 @@ public class FinancialTracker {
 
             }
         }
+        Collections.reverse(transactions);
 
 
         /* TODO – only amount < 0               */
@@ -319,6 +332,7 @@ public class FinancialTracker {
        Reporting helpers
        ------------------------------------------------------------------ */
     private static void filterTransactionsByDate(LocalDate start, LocalDate end) {
+
 
 
         // TODO – iterate transactions, print those within the range
