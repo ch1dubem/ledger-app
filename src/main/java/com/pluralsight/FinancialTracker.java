@@ -181,39 +181,63 @@ public class FinancialTracker {
         }
     }
 
-    /**
-     * Same prompts as addDeposit.
-     * Amount must be entered as a positive number,
-     * then converted to a negative amount before storing.
-     */
+
     private static void addPayment(Scanner scanner) {
-        System.out.println("Enter date and time (yyyy-MM-dd HH:mm:ss): ");
-        String dateTime = scanner.nextLine().trim();
+        LocalDate date = null;
+        LocalTime time = null;
+        String description = null;
+        String vendor = null;
+        double amount = 0;
 
-        LocalDate date;
-        LocalTime time;
-        try {
-            date = LocalDate.parse(dateTime.substring(0, 10), DATE_FMT);
-            time = LocalTime.parse(dateTime.substring(11), TIME_FMT);
-        } catch (Exception e) {
-            System.out.println("Invalid date/time format. Please use yyyy-MM-dd|HH:mm:ss");
-            return;
+        // Date and time input
+        while (date == null || time == null) {
+            System.out.println("Enter date and time (yyyy-MM-dd HH:mm:ss): ");
+            String dateTime = scanner.nextLine().trim();
+            try {
+                String[] parts = dateTime.split(" ");
+                date = LocalDate.parse(parts[0], DATE_FMT);
+                time = LocalTime.parse(parts[1], TIME_FMT);
+            } catch (Exception e) {
+                System.out.println("Invalid format. Please use yyyy-MM-dd HH:mm:ss");
+            }
         }
 
-        System.out.println("Enter Description:");
-        String description = scanner.nextLine();
-
-        System.out.println("Enter vendor:");
-        String vendor = scanner.nextLine();
-
-        System.out.println("Enter Payment:");
-        double amount = Double.parseDouble(scanner.nextLine());
-
-        if (amount <= 0) {
-            System.out.println("Payment must be positive.");
-            return;
+        // Description input
+        while (description == null || description.isEmpty()) {
+            System.out.println("Enter Description:");
+            description = scanner.nextLine().trim();
+            if (description.isEmpty()) {
+                System.out.println("Description cannot be empty.");
+            }
         }
-        amount = -amount;
+
+        // Vendor input
+        while (vendor == null || vendor.isEmpty()) {
+            System.out.println("Enter vendor:");
+            vendor = scanner.nextLine().trim();
+            if (vendor.isEmpty()) {
+                System.out.println("Vendor cannot be empty.");
+            }
+        }
+
+        // Amount input
+        boolean validAmount = false;
+        while (!validAmount) {
+            System.out.println("Enter amount to pay:");
+            String amountStr = scanner.nextLine().trim();
+            try {
+                amount = Double.parseDouble(amountStr);
+                if (amount <= 0) {
+                    System.out.println("Amount must be positive.");
+                } else {
+                    validAmount = true;
+                }
+            } catch (Exception e) {
+                System.out.println("Invalid amount. Please enter a number.");
+            }
+        }
+
+        amount = -amount; // convert to negative for payment
 
         transactions.add(new Transaction(date, time, description, vendor, amount));
 
@@ -226,10 +250,7 @@ public class FinancialTracker {
             System.out.println("Payment Processed");
         } catch (IOException e) {
             System.out.println("Error processing payment.");
-
         }
-
-        // TODO
     }
 
     /* ------------------------------------------------------------------
