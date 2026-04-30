@@ -109,37 +109,62 @@ public class FinancialTracker {
        ------------------------------------------------------------------ */
 
     /**
-     * Prompt for ONE date+time string in the format
-     * "yyyy-MM-dd HH:mm:ss", plus description, vendor, amount.
-     * Validate that the amount entered is positive.
-     * Store the amount as-is (positive) and append to the file.
+     *
+     * @param scanner
      */
     private static void addDeposit(Scanner scanner) {
-        System.out.println("Enter date and time (yyyy-MM-dd HH:mm:ss): ");
-        String dateTime = scanner.nextLine().trim();
+        LocalDate date = null;
+        LocalTime time = null;
+        String description = null;
+        String vendor = null;
+        double amount = 0;
 
-        LocalDate date;
-        LocalTime time;
-        try {
-            date = LocalDate.parse(dateTime.substring(0, 10), DATE_FMT);
-            time = LocalTime.parse(dateTime.substring(11), TIME_FMT);
-        } catch (Exception e) {
-            System.out.println("Invalid date/time format. Please use yyyy-MM-dd|HH:mm:ss");
-            return;
+        // Date and time input
+        while (date == null || time == null) {
+            System.out.println("Enter date and time (yyyy-MM-dd HH:mm:ss): ");
+            String dateTime = scanner.nextLine().trim();
+            try {
+                String[] parts = dateTime.split(" ");
+                date = LocalDate.parse(parts[0], DATE_FMT);
+                time = LocalTime.parse(parts[1], TIME_FMT);
+            } catch (Exception e) {
+                System.out.println("Invalid format. Please use yyyy-MM-dd HH:mm:ss");
+            }
         }
 
-        System.out.println("Enter Description:");
-        String description = scanner.nextLine();
+        // Description input
+        while (description == null || description.isEmpty()) {
+            System.out.println("Enter Description:");
+            description = scanner.nextLine().trim();
+            if (description.isEmpty()) {
+                System.out.println("Description cannot be empty.");
+            }
+        }
 
-        System.out.println("Enter vendor:");
-        String vendor = scanner.nextLine();
+        // Vendor input
+        while (vendor == null || vendor.isEmpty()) {
+            System.out.println("Enter vendor:");
+            vendor = scanner.nextLine().trim();
+            if (vendor.isEmpty()) {
+                System.out.println("Vendor cannot be empty.");
+            }
+        }
 
-        System.out.println("Enter amount to deposit:");
-        double amount = Double.parseDouble(scanner.nextLine());
-
-        if (amount <= 0) {
-            System.out.println("Amount must be positive.");
-            return;
+        // Amount input
+        boolean validAmount = false;
+        while (!validAmount) {
+            System.out.println("Enter amount to deposit:");
+            String amountStr = scanner.nextLine().trim();
+            try {
+                amount = Double.parseDouble(amountStr);
+                if (amount <= 0) {
+                    System.out.println("Amount must be positive.");
+                } else {
+                    validAmount = true;
+                }
+            } catch (Exception e) {
+                System.out.println("Invalid amount. Please enter a number.");
+            }
         }
 
         transactions.add(new Transaction(date, time, description, vendor, amount));
@@ -153,11 +178,7 @@ public class FinancialTracker {
             System.out.println("Deposit Processed");
         } catch (IOException e) {
             System.out.println("Error processing deposit.");
-
         }
-
-
-        // TODO
     }
 
     /**
@@ -215,6 +236,7 @@ public class FinancialTracker {
        Ledger menu
        ------------------------------------------------------------------ */
     private static void ledgerMenu(Scanner scanner) {
+
         boolean running = true;
         while (running) {
             System.out.println("Ledger");
@@ -315,6 +337,7 @@ public class FinancialTracker {
 
             String input = scanner.nextLine().trim();
 
+
             switch (input) {
                 case "1" -> {
                     filterTransactionsByDate(LocalDate.now().withDayOfMonth(1), LocalDate.now());
@@ -329,7 +352,10 @@ public class FinancialTracker {
                     filterTransactionsByDate(LocalDate.now().withDayOfYear(1), LocalDate.now());
                     /* TODO – year-to-date report   */
                 }
-                case "4" -> {/* TODO – previous year report  */ }
+                case "4" -> {
+
+                    /* TODO – previous year report  */
+                }
                 case "5" -> {/* TODO – prompt for vendor then report */ }
                 case "6" -> customSearch(scanner);
                 case "0" -> running = false;
