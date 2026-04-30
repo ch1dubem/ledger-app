@@ -355,7 +355,15 @@ public class FinancialTracker {
                     filterTransactionsByDate(firstOfLastYear, lastOfLastYear);
                     /* TODO – previous year report  */
                 }
-                case "5" -> {/* TODO – prompt for vendor then report */ }
+                case "5" -> {
+                    System.out.print("Enter vendor name: ");
+                    String vendor = scanner.nextLine().trim();
+                    if (vendor.isEmpty()) {
+                        System.out.println("Vendor cannot be empty.");
+                    } else {
+                        filterTransactionsByVendor(vendor);
+                    }
+                }
                 case "6" -> customSearch(scanner);
                 case "0" -> running = false;
                 default -> System.out.println("Invalid option");
@@ -367,22 +375,28 @@ public class FinancialTracker {
        Reporting helpers
        ------------------------------------------------------------------ */
     private static void filterTransactionsByDate(LocalDate start, LocalDate end) {
-        ArrayList<Transaction> results = new ArrayList<>();
+        ArrayList<Transaction> dateResults = new ArrayList<>();
         for (Transaction transaction : transactions) {
             LocalDate date = transaction.getDate();
             boolean onOrAfterStart = date.isEqual(start) || date.isAfter(start);
             boolean onOrBeforeEnd = date.isEqual(end) || date.isBefore(end);
 
             if (onOrAfterStart && onOrBeforeEnd) {
-                results.add(transaction);
+                dateResults.add(transaction);
             }
         }
-        printTransactionTable(results);
+        printTransactionTable(dateResults);
     }
 
     private static void filterTransactionsByVendor(String vendor) {
-
-        // TODO – iterate transactions, print those with matching vendor
+        // Build a list of transactions matching the vendor
+        ArrayList<Transaction> vendorResults = new ArrayList<>();
+        for (Transaction transaction : transactions) {
+            if (transaction.getVendor().equalsIgnoreCase(vendor)) {
+                vendorResults.add(transaction);
+            }
+        }
+        printTransactionTable(vendorResults);
     }
 
     private static void customSearch(Scanner scanner) {
