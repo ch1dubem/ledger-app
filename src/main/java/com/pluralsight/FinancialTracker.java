@@ -5,7 +5,6 @@ import java.time.LocalDate;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.Scanner;
 
 /*
@@ -295,9 +294,9 @@ public class FinancialTracker {
 
         // Build a list of only deposits
         ArrayList<Transaction> deposits = new ArrayList<>();
-        for (Transaction t : transactions) {
-            if (t.getAmount() > 0) {
-                deposits.add(t);
+        for (Transaction transaction : transactions) {
+            if (transaction.getAmount() > 0) {
+                deposits.add(transaction);
             }
         }
         printTransactionTable(deposits);
@@ -305,23 +304,16 @@ public class FinancialTracker {
 
 
     private static void displayPayments() {
-        System.out.println("All Payments:");
-        System.out.println("-".repeat(75));
-        System.out.printf("%-12s %-10s %-25s %-15s %10s%n", "Date", "Time", "Description", "Vendor", "Amount");
-        System.out.println("-".repeat(75));
-        Collections.reverse(transactions);
-        for (Transaction transaction : transactions) {
-            if(transaction.getAmount() < 0) {
-                System.out.printf("%-12s %-10s %-25s %-15s %10.2f%n",
-                        transaction.getDate().format(DATE_FMT), transaction.getTime().format(TIME_FMT),
-                        transaction.getTransactionDescription(), transaction.getVendor(), transaction.getAmount());
+        System.out.println("\nAll Payments:");
 
+        // Build a list of only payments
+        ArrayList<Transaction> payments = new ArrayList<>();
+        for (Transaction transaction : transactions) {
+            if (transaction.getAmount() < 0) {
+                payments.add(transaction);
             }
         }
-        Collections.reverse(transactions);
-
-
-        /* TODO – only amount < 0               */
+        printTransactionTable(payments);
     }
 
     /* ------------------------------------------------------------------
