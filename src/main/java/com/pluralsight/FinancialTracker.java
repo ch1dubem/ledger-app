@@ -447,5 +447,28 @@ public class FinancialTracker {
                     t.getAmount());
         }
     }
+
+    private static void sortTransactions() {
+        for (int i = 0; i < transactions.size() - 1; i++) {
+            for (int j = i + 1; j < transactions.size(); j++) {
+                Transaction a = transactions.get(i);
+                Transaction b = transactions.get(j);
+
+                // Compare dates first
+                int compare = b.getDate().compareTo(a.getDate());
+
+                // If same date, compare times
+                if (compare == 0) {
+                    compare = b.getTime().compareTo(a.getTime());
+                }
+
+                // If b is newer than a, swap them
+                if (compare > 0) {
+                    transactions.set(i, b);
+                    transactions.set(j, a);
+                }
+            }
+        }
+    }
 }
 
