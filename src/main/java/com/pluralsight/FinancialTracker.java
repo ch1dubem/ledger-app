@@ -291,23 +291,18 @@ public class FinancialTracker {
     }
 
     private static void displayDeposits() {
-        System.out.println("All Deposits:");
-        System.out.println("-".repeat(75));
-        System.out.printf("%-12s %-10s %-25s %-15s %10s%n", "Date", "Time", "Description", "Vendor", "Amount");
-        System.out.println("-".repeat(75));
-        Collections.reverse(transactions);
-        for (Transaction transaction : transactions) {
-            if(transaction.getAmount() >= 0) {
-                System.out.printf("%-12s %-10s %-25s %-15s %10.2f%n",
-                        transaction.getDate().format(DATE_FMT), transaction.getTime().format(TIME_FMT),
-                        transaction.getTransactionDescription(), transaction.getVendor(), transaction.getAmount());
+        System.out.println("\nAll Deposits:");
 
+        // Build a list of only deposits
+        ArrayList<Transaction> deposits = new ArrayList<>();
+        for (Transaction t : transactions) {
+            if (t.getAmount() > 0) {
+                deposits.add(t);
             }
         }
-        Collections.reverse(transactions);
-        /* TODO – only amount > 0               */
-
+        printTransactionTable(deposits);
     }
+
 
     private static void displayPayments() {
         System.out.println("All Payments:");
