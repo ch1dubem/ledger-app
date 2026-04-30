@@ -426,5 +426,26 @@ public class FinancialTracker {
         /* TODO – return Double   or null */
         return null;
     }
+    private static void printTransactionTable(ArrayList<Transaction> list) {
+        System.out.println("-".repeat(75));
+        System.out.printf("%-12s %-10s %-25s %-15s %10s%n", "Date", "Time", "Description", "Vendor", "Amount");
+        System.out.println("-".repeat(75));
+
+        // If no transactions to show, display a message
+        if (list.isEmpty()) {
+            System.out.println("No transactions found.");
+            return;
+        }
+
+        // Print each transaction in formatted columns
+        for (Transaction t : list) {
+            System.out.printf("%-12s %-10s %-25s %-15s %10.2f%n",
+                    t.getDate().format(DATE_FMT),
+                    t.getTime().format(TIME_FMT),
+                    t.getTransactionDescription(),
+                    t.getVendor(),
+                    t.getAmount());
+        }
+    }
 }
 
