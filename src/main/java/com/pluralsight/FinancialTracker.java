@@ -341,7 +341,7 @@ public class FinancialTracker {
                     /* TODO – month-to-date report */}
                 case "2" -> {
                     LocalDate firstDayOfLastMonth = LocalDate.now().minusMonths(1).withDayOfMonth(1);
-                    LocalDate lastDayOfLastMonth = firstDayOfLastMonth.plusMonths(1).minusDays(1);
+                    LocalDate lastDayOfLastMonth = firstDayOfLastMonth.withDayOfMonth(firstDayOfLastMonth.lengthOfMonth());
                     filterTransactionsByDate(firstDayOfLastMonth, lastDayOfLastMonth);
                     /* TODO – previous month report */
                 }
@@ -350,7 +350,9 @@ public class FinancialTracker {
                     /* TODO – year-to-date report   */
                 }
                 case "4" -> {
-
+                    LocalDate firstOfLastYear = LocalDate.now().minusYears(1).withDayOfYear(1);
+                    LocalDate lastOfLastYear = firstOfLastYear.withDayOfYear(firstOfLastYear.lengthOfYear());
+                    filterTransactionsByDate(firstOfLastYear, lastOfLastYear);
                     /* TODO – previous year report  */
                 }
                 case "5" -> {/* TODO – prompt for vendor then report */ }
@@ -365,19 +367,17 @@ public class FinancialTracker {
        Reporting helpers
        ------------------------------------------------------------------ */
     private static void filterTransactionsByDate(LocalDate start, LocalDate end) {
-        System.out.printf("%-12s %-10s %-25s %-15s %10s%n", "Date", "Time", "Description", "Vendor", "Amount");
-        System.out.println("-".repeat(75));
+        ArrayList<Transaction> results = new ArrayList<>();
         for (Transaction transaction : transactions) {
-            if (transaction.getDate().isAfter(start) && transaction.getDate().isBefore(end)) {
-                System.out.printf("%-12s %-10s %-25s %-15s %10.2f%n",
-                        transaction.getDate().format(DATE_FMT), transaction.getTime().format(TIME_FMT),
-                        transaction.getTransactionDescription(), transaction.getVendor(), transaction.getAmount());
-                        return;
-            }
+            LocalDate date = transaction.getDate();
+            boolean onOrAfterStart = date.isEqual(start) || date.isAfter(start);
+            boolean onOrBeforeEnd = date.isEqual(end) || date.isBefore(end);
 
+            if (onOrAfterStart && onOrBeforeEnd) {
+                results.add(transaction);
+            }
         }
-        System.out.println("No transactions found");
-        // TODO – iterate transactions, print those within the range
+        printTransactionTable(results);
     }
 
     private static void filterTransactionsByVendor(String vendor) {
