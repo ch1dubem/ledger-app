@@ -260,6 +260,7 @@ public class FinancialTracker {
 
         boolean running = true;
         while (running) {
+            sortTransactions();
             System.out.println("Ledger");
             System.out.println("Choose an option:");
             System.out.println("A) All");
@@ -285,20 +286,8 @@ public class FinancialTracker {
        Display helpers: show data in neat columns
        ------------------------------------------------------------------ */
     private static void displayLedger() {
-        System.out.println("All Transactions:");
-        System.out.println("-".repeat(75));
-        System.out.printf("%-12s %-10s %-25s %-15s %10s%n", "Date", "Time", "Description", "Vendor", "Amount");
-        System.out.println("-".repeat(75));
-        Collections.reverse(transactions);
-        for (Transaction transaction : transactions) {
-            System.out.printf("%-12s %-10s %-25s %-15s %10.2f%n",
-                    transaction.getDate().format(DATE_FMT), transaction.getTime().format(TIME_FMT),
-                    transaction.getTransactionDescription(), transaction.getVendor(), transaction.getAmount());
-
-        }
-        Collections.reverse(transactions);
-
-        /* TODO – print all transactions in column format */
+        System.out.println("\nAll Transactions:");
+        printTransactionTable(transactions);
     }
 
     private static void displayDeposits() {
