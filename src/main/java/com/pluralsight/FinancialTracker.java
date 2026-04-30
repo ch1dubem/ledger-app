@@ -400,22 +400,74 @@ public class FinancialTracker {
     }
 
     private static void customSearch(Scanner scanner) {
-        // TODO – prompt for any combination of date range, description,
-        //        vendor, and exact amount, then display matches
+        // Prompt for each field - leave blank to skip
+        System.out.print("Start date (yyyy-MM-dd or blank): ");
+        String startStr = scanner.nextLine().trim();
+
+        System.out.print("End date (yyyy-MM-dd or blank): ");
+        String endStr = scanner.nextLine().trim();
+
+        System.out.print("Description (or blank): ");
+        String description = scanner.nextLine().trim();
+
+        System.out.print("Vendor (or blank): ");
+        String vendor = scanner.nextLine().trim();
+
+        System.out.print("Amount (or blank): ");
+        String amountStr = scanner.nextLine().trim();
+
+        // Parse the optional fields - null means the user skipped it
+        LocalDate start = parseDate(startStr);
+        LocalDate end = parseDate(endStr);
+        Double amount = parseDouble(amountStr);
+
+        // Build a list of matching transactions
+        ArrayList<Transaction> results = new ArrayList<>();
+        for (Transaction transaction : transactions) {
+            // Skip if start date is set and transaction is before it
+            if (start != null && transaction.getDate().isBefore(start)) continue;
+
+            // Skip if end date is set and transaction is after it
+            if (end != null && transaction.getDate().isAfter(end)) continue;
+
+            // Skip if description is set and doesn't match
+            if (!description.isEmpty() && !transaction.getTransactionDescription().toLowerCase().contains(description.toLowerCase())) continue;
+
+            // Skip if vendor is set and doesn't match
+            if (!vendor.isEmpty() && !transaction.getVendor().equalsIgnoreCase(vendor)) continue;
+
+            // Skip if amount is set and doesn't match
+            if (amount != null && transaction.getAmount() != amount) continue;
+
+            // Transaction passed all filters, add to results
+            results.add(transaction);
+        }
+        printTransactionTable(results);
     }
 
     /* ------------------------------------------------------------------
        Utility parsers (you can reuse in many places)
        ------------------------------------------------------------------ */
     private static LocalDate parseDate(String s) {
-        /* TODO – return LocalDate or null */
-        return null;
+        if (s == null || s.isEmpty()) return null;
+        try {
+            return LocalDate.parse(s.trim(), DATE_FMT);
+        } catch (Exception e) {
+            System.out.println("Invalid date format, skipping this filter.");
+            return null;
+        }
     }
 
     private static Double parseDouble(String s) {
-        /* TODO – return Double   or null */
-        return null;
+        if (s == null || s.isEmpty()) return null;
+        try {
+            return Double.parseDouble(s.trim());
+        } catch (Exception e) {
+            System.out.println("Invalid amount format, skipping this filter.");
+            return null;
+        }
     }
+
     private static void printTransactionTable(ArrayList<Transaction> list) {
         System.out.println("-".repeat(75));
         System.out.printf("%-12s %-10s %-25s %-15s %10s%n", "Date", "Time", "Description", "Vendor", "Amount");
