@@ -488,16 +488,16 @@ public class FinancialTracker {
             return;
         }
 
-        for (Transaction t : list) {
+        for (Transaction transaction: list) {
             // Green for deposits, red for payments
-            String color = t.getAmount() > 0 ? GREEN : RED;
+            String color = transaction.getAmount() > 0 ? GREEN : RED;
 
             System.out.printf("%-12s %-10s %-25s %-15s " + color + "%10.2f" + RESET + "%n",
-                    t.getDate().format(DATE_FMT),
-                    t.getTime().format(TIME_FMT),
-                    t.getTransactionDescription(),
-                    t.getVendor(),
-                    t.getAmount());
+                    transaction.getDate().format(DATE_FMT),
+                    transaction.getTime().format(TIME_FMT),
+                    transaction.getTransactionDescription(),
+                    transaction.getVendor(),
+                    transaction.getAmount());
         }
         System.out.println(CYAN + "-".repeat(75) + RESET);
     }
